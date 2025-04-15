@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>물건 선택 체크리스트</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1e88e5">
+  <link rel="icon" href="icon-192.png">
+  <style>
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f4f8;
+    }
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #1e88e5;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 12px;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    input[type="checkbox"] {
+      margin-right: 10px;
+      transform: scale(1.2);
+    }
+    button {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background-color: #1e88e5;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    #result {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        margin: 20px;
+        padding: 16px;
+      }
+      h2 {
+        font-size: 20px;
+      }
+      label {
+        font-size: 15px;
+      }
+      button {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>물건 선택 체크리스트</h2>
+    <form id="checklistForm">
+      <label><input type="checkbox" name="criteria" value="1"> 내가 가진 용돈으로 살 수 있나요?</label>
+      <label><input type="checkbox" name="criteria" value="1"> 내가 가진 용돈을 사용하였을 때 내가 다음 필요한 활동을 할 수 있나요?</label>
+      <label><input type="checkbox" name="criteria" value="1"> 비슷한 물건이 없나요?</label>
+      <label><input type="checkbox" name="criteria" value="1"> 꼭 필요한 물건인지 다시 한 번 생각해 봤나요?</label>
+      <label><input type="checkbox" name="criteria" value="1"> 오래 사용할 수 있나요?</label>
+      <label><input type="checkbox" name="criteria" value="1"> 부모님이나 선생님께서 허용할 물건인가요?</label>
+      <button type="button" onclick="evaluateChecklist()">결과 보기</button>
+    </form>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const goodMessages = [
+      "👍 이 물건은 신중하게 선택한 것 같아요!",
+      "✅ 잘 고민했어요! 이 물건은 살만한 가치가 있어 보여요!",
+      "🎯 현명한 소비자처럼 행동했네요!"
+    ];
+    const maybeMessages = [
+      "🤔 조금 더 생각해 보면 좋겠어요.",
+      "🔍 다른 선택지가 없는지 살펴보는 것도 좋아요.",
+      "📌 지금 꼭 필요한지 다시 한 번 고민해 보세요."
+    ];
+    const badMessages = [
+      "❌ 지금은 사지 않는 것이 좋아 보여요.",
+      "🛑 조금 더 기다렸다가 결정해도 늦지 않아요.",
+      "💸 충동구매일 수도 있어요. 멈춰요!"
+    ];
+
+    function evaluateChecklist() {
+      const checked = document.querySelectorAll('input[name="criteria"]:checked').length;
+      const result = document.getElementById('result');
+      let message;
+
+      if (checked >= 5) {
+        message = goodMessages[Math.floor(Math.random() * goodMessages.length)];
+      } else if (checked >= 3) {
+        message = maybeMessages[Math.floor(Math.random() * maybeMessages.length)];
+      } else {
+        message = badMessages[Math.floor(Math.random() * badMessages.length)];
+      }
+
+      result.innerText = message;
+    }
+
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
+</body>
+</html>
